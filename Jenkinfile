@@ -1,21 +1,31 @@
-pipeline{
-	agent any
-	stages{
-		stage("clone"){
-			echo "Cloning is Done....."
-			}
-		}
-		stage("build"){
-			echo "building package is done"
-			}
-		}
-		stage("test"){
-			echo "testing of the package is done........."
-			}
-		}
-		stage("deploy"){
-			echo "deployment is done"
-			}
-		}
-	}
+pipeline {
+    agent any
+
+    stages {
+
+        stage("clone") {
+            steps {
+                echo "Cloning is Done....."
+            }
+        }
+
+        stage("build") {
+            steps {
+                echo "Building package is done"
+            }
+        }
+
+        stage("test") {
+            steps {
+                echo "Testing of the package is done........."
+            }
+        }
+
+        stage("deploy") {
+            steps {
+                echo "Deployment is done"
+            }
+        }
+
+    }
 }
