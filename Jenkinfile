@@ -1,31 +1,82 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME    = 'Demo-Application'
+        ENVIRONMENT = 'Production'
+        OWNER_NAME  = 'Ayush Singh'
+    }
+
     stages {
 
-        stage("clone") {
+        stage('Clone') {
             steps {
-                echo "Cloning is Done....."
+                echo "Source code checkout completed successfully for ${APP_NAME}."
             }
         }
 
-        stage("build") {
+        stage('Build') {
             steps {
-                echo "Building package is done"
+                echo "Build stage completed successfully for ${APP_NAME}."
             }
         }
 
-        stage("test") {
+        stage('Test') {
             steps {
-                echo "Testing of the package is done........."
+                echo "All tests executed successfully in ${ENVIRONMENT} environment."
             }
         }
 
-        stage("deploy") {
+        stage('Creation') {
             steps {
-                echo "Deployment is done"
+                echo "Creation of files and folders started."
+
+                sh '''
+                    touch a.txt
+                    mkdir -p ayush
+                    cd ayush
+                    touch b.txt c.txt
+                '''
             }
         }
 
+        stage('Deploy') {
+            steps {
+                echo "Application ${APP_NAME} deployed successfully to ${ENVIRONMENT}."
+            }
+        }
+    }
+
+    post {
+        success {
+            emailext(
+                to: 'ayush054453@gmail.com',
+                subject: "Jenkins Pipeline Success | ${APP_NAME}",
+                mimeType: 'text/plain',
+                body: """
+Dear Team,
+
+I am pleased to inform you that the Jenkins pipeline for ${APP_NAME} has completed successfully.
+
+All configured stages—including checkout, build, testing, file creation, and deployment—were executed without any errors.
+
+Execution Summary:
+-----------------------------------
+Pipeline Status : SUCCESS
+Application     : ${APP_NAME}
+Environment     : ${ENVIRONMENT}
+Build Number    : ${BUILD_NUMBER}
+Failures        : None
+-----------------------------------
+
+The application is now deployed and operating as expected.
+
+Please let me know if any further validation is required.
+
+Best regards,
+${OWNER_NAME}
+"""
+            )
+        }
     }
 }
